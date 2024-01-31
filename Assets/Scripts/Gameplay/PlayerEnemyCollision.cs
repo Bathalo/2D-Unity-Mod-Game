@@ -32,6 +32,7 @@ namespace Platformer.Gameplay
                     {
                         Schedule<EnemyDeath>().enemy = enemy;
                         player.Bounce(2);
+                        player.PlayKickAnimation();
                     }
                     else
                     {
@@ -42,6 +43,7 @@ namespace Platformer.Gameplay
                 {
                     Schedule<EnemyDeath>().enemy = enemy;
                     player.Bounce(2);
+                    player.PlayKickAnimation();
                 }
             }
             else

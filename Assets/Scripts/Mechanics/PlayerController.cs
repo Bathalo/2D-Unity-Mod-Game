@@ -41,6 +41,7 @@ namespace Platformer.Mechanics
         public Vector2 move;
         public SpriteRenderer spriteRenderer;
         internal Animator animator;
+        private bool isKicking = false;
         readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
         public Bounds Bounds => collider2d.bounds;
@@ -52,6 +53,7 @@ namespace Platformer.Mechanics
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
+
         }
 
         protected override void Update()
@@ -75,8 +77,31 @@ namespace Platformer.Mechanics
             base.Update();
         }
 
+        public void PlayKickAnimation()
+        {
+            if (!isKicking)
+            {
+                animator.SetTrigger("Kick");
+                isKicking = true;
+            }
+        }
+
+        public void OnKickAnimationComplete()
+        {
+            // Kick
+            isKicking = false;
+        }
+
+        private bool IsMoving()
+        {
+            // Movement
+            float horizontalInput = Input.GetAxis("Horizontal");
+            return Mathf.Abs(horizontalInput) > 0.1f;
+        }
+
         void UpdateJumpState()
         {
+            // Jump
             jump = false;
             switch (jumpState)
             {
@@ -143,7 +168,7 @@ namespace Platformer.Mechanics
 
         public bool CanShoot()
         {
-            return IsGrounded;
+            return IsGrounded && !IsMoving();
         }
 
     }
